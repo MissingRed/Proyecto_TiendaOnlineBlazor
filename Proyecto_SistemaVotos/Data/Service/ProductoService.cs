@@ -1,13 +1,13 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
-using Proyecto_SistemaVotos.Data.Model;
+using Proyecto_TiendaOnline.Data.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Proyecto_SistemaVotos.Data.Service
+namespace Proyecto_TiendaOnline.Data.Service
 {
     public class ProductoService : IProductoService
     {

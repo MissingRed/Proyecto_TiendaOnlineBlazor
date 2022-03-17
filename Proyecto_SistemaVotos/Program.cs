@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Proyecto_SistemaVotos
+namespace Proyecto_TiendaOnline
 {
     public class Program
     {

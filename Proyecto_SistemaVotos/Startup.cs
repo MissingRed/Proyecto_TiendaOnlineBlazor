@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Proyecto_SistemaVotos.Data;
-using Proyecto_SistemaVotos.Data.Service;
+using Proyecto_TiendaOnline.Data;
+using Proyecto_TiendaOnline.Data.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Proyecto_SistemaVotos
+namespace Proyecto_TiendaOnline
 {
     public class Startup
     {

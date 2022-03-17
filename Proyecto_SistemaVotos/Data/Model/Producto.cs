@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Proyecto_SistemaVotos.Data.Model
+namespace Proyecto_TiendaOnline.Data.Model
 {
     public class Producto
     {

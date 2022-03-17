@@ -1,8 +1,8 @@
-﻿using Proyecto_SistemaVotos.Data.Model;
+﻿using Proyecto_TiendaOnline.Data.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Proyecto_SistemaVotos.Data.Service
+namespace Proyecto_TiendaOnline.Data.Service
 {
     public interface IProductoService
     {
