@@ -1,0 +1,110 @@
+﻿@page "/Productos"
+
+@using Proyecto_SistemaVotos.Data.Model
+@using Proyecto_SistemaVotos.Data.Service
+@using System.IO
+@using System.Net.Mail;
+    
+
+@inject IProductoService ProductoService
+
+<h1 style="color:Highlight">Lista de Productos</h1>
+
+@if(productos == null)
+ {
+    <p><em>CARGANDO ...</em></p>
+
+ }
+ else
+ {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id Producto</th>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Fecha Registro</th>
+                <th>Activo</th>
+             
+                <td><a href="/ProductoAdd" style="text-align:right"><i>Nuevo</i></a></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var producto in productos)
+             {
+            <tr>
+                <td>@producto.IdProducto</td>
+                <td>@producto.Nombre</td>
+                <td>@producto.Marca</td>
+                <td>@producto.FechaRegistro</td>
+                <td>@producto.Activo</td>
+           
+                <td><a href="/ProductoUpdate/@producto.IdProducto"><i>Editar</i></a></td>
+                <td><a href="/ProductoDelete/@producto.IdProducto"><i>Eliminar</i></a></td>
+            </tr>
+ 
+             }
+        </tbody>
+    </table>
+    
+    <h1>Enviar correo electronico con los productos registrados</h1>
+    <button @onclick="sendMail" class="btn btn-primary">Enviar correo</button>
+    <span> @Message</span>
+
+ }
+
+@code {
+
+    private IEnumerable<Producto> productos;
+    private string Message { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            productos = await ProductoService.TodasProductos();
+        }
+        catch (Exception)
+        {
+            throw;
+
+        }
+
+    }
+
+    private void sendMail()
+    {
+        try {
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("daniel.rodriguez06@usc.edu.co");
+                mail.To.Add("daniel.rodriguez06@usc.edu.co");
+                mail.Subject = "¡Hola, no dejes pasar la oportunidad y mira estos nuevos productos!";
+
+
+                foreach (var producto in productos)
+                {
+                 mail.Body = "<h2>Nuevo producto a la venta! </p>" + "<br>" + "ID Producto: " + producto.IdProducto + "<br>" + "Nombre: " + producto.Nombre + " <br>" + "ID marca: " + producto.Marca + "<br>" + "Fecha: " + producto.FechaRegistro;   
+                }
+                
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)){
+
+                    smtp.Credentials = new System.Net.NetworkCredential("daniel.rodriguez04@usc.edu.co", "daniel4491623");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                    Message = "El correo fue enviado!";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+    }
+
+   
+
+}

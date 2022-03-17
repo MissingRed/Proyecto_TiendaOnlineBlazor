@@ -1,0 +1,79 @@
+﻿@page "/VotanteDelete/{id:int}"
+
+@using Proyecto_SistemaVotos.Data.Model
+@using Proyecto_SistemaVotos.Data.Service
+
+@inject IVotanteService IVotanteService
+@inject NavigationManager NavigationManager
+
+<h1 style="color:Highlight">Eliminar Eleccion</h1>
+
+<p style="color:red;text-align:center">Seguro que quieres eliminar la eleccion ?</p>
+
+<EditForm Model="@votante" OnValidSubmit="@EliminarVotante">
+    <table class="table">
+        <tr>
+            <td>IdVotante:</td>
+            <td><input type="text" @bind="votante.IdVotante" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Documento Identidad:</td>
+            <td><input type="text" @bind="votante.DocumentoIdentidad" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Nombres:</td>
+            <td><input type="text" @bind="votante.Nombres" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Apellidos:</td>
+            <td><input type="text" @bind="votante.Apellidos" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>IdEleccion:</td>
+            <td><input type="text" @bind="votante.IdEleccion" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Activo:</td>
+            <td><input type="text" @bind="votante.Activo" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>FechaRegistro:</td>
+            <td><input type="text" @bind="votante.FechaRegistro" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Emitio Votacion:</td>
+            <td><input type="text" @bind="votante.EmitioVotacion" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Eliminar" />
+                <input type="button" value="Cancelar" @onclick="@Cancel" />
+            </td>
+        </tr>
+
+    </table>
+
+</EditForm>
+
+@code {
+    Votante votante = new Votante();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected async Task EliminarVotante()
+    {
+        await IVotanteService.VotanteDelete(votante);
+        NavigationManager.NavigateTo("/ListaVotantes");
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        votante = await IVotanteService.ObtenerVotante(id);
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/ListaVotantes");
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page "/ProductoDelete/{id:int}"
+
+@using Proyecto_SistemaVotos.Data.Model
+@using Proyecto_SistemaVotos.Data.Service
+
+@inject IProductoService IProductoService
+@inject NavigationManager NavigationManager
+
+<h1 style="color:Highlight">Eliminar Producto</h1>
+
+<p style="color:red;text-align:center">Seguro que quieres eliminar el producto ?</p>
+
+<EditForm Model="@producto" OnValidSubmit="@EliminarProducto">
+    <table class="table">
+        <tr>
+            <td>Id Producto:</td>
+            <td><input type="text" @bind="producto.IdProducto" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Nombre:</td>
+            <td><input type="text" @bind="producto.Nombre" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Marca:</td>
+            <td><input type="text" @bind="producto.Marca" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Fecha Registro:</td>
+            <td><input type="text" @bind="producto.FechaRegistro" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>Activo:</td>
+            <td><input type="text" @bind="producto.Activo" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Eliminar" />
+                <input type="button" value="Cancelar" @onclick="@Cancel" />
+            </td>
+        </tr>
+
+    </table>
+
+</EditForm>
+
+@code {
+    Producto producto = new Producto();
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected async Task EliminarProducto()
+    {
+        await IProductoService.ProductoDelete(producto);
+        NavigationManager.NavigateTo("/Productos");
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        producto = await IProductoService.ObtenerProducto(id);
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/Productos");
+    }
+}

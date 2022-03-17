@@ -1,0 +1,84 @@
+﻿@page "/ProductoUpdate"
+@page "/ProductoUpdate/{id:int}"
+
+@using Proyecto_SistemaVotos.Data.Model
+@using Proyecto_SistemaVotos.Data.Service
+
+@inject IProductoService IProductoService
+@inject NavigationManager NavigationManager
+
+<!--FORMULARIO ADICIONAR PRODUCTO-->
+<h1 style="color:Highlight">ACTUALIZAR PRODUCTO</h1>
+
+<EditForm Model="@producto" OnValidSubmit="@ActualizarProducto">
+    <table class="table">
+        <tr>
+            <td>Id Producto:</td>
+            <td><input type="text" @bind="producto.IdProducto" required /></td>
+        </tr>
+        <tr>
+            <td>Nombre:</td>
+            <td><input type="text" @bind="producto.Nombre" required /></td>
+        </tr>
+        <tr>
+            <td>Marca:</td>
+            <td><input type="text" @bind="producto.Marca" /></td>
+        </tr>
+        <tr>
+            <td>Fecha Registro:</td>
+            <td><input type="text" @bind="producto.FechaRegistro" /></td>
+        </tr>
+        <tr>
+            <td>Activo:</td>
+            <td>
+                <InputSelect @bind-Value="producto.Activo">
+                    <option>Elige una opcion</option>
+                    <option>0</option>
+                    <option>1</option>
+                </InputSelect>
+            </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="submit" value="Actualizar" />
+            <input type="button" value="Cancelar" @onclick="@Cancel" />
+        </td>
+    </tr>
+
+    </table>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    Producto producto = new Producto();
+
+    protected async Task ActualizarProducto()
+    {
+        await IProductoService.ProductoUpdate(producto);
+
+        NavigationManager.NavigateTo("/Productos");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/Productos");
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (id == 0)
+        {
+            producto.FechaRegistro = DateTime.Now;
+        }
+        else
+        {
+            producto = await IProductoService.ObtenerProducto(id);
+        }
+
+    }
+}

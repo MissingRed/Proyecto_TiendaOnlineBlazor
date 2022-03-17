@@ -1,0 +1,113 @@
+﻿@page "/ProductoAdd"
+
+@using Proyecto_SistemaVotos.Data.Model
+@using Proyecto_SistemaVotos.Data.Service
+@using System.Net.Mail
+@using System.IO
+@inject IProductoService IProductoService
+@inject NavigationManager NavigationManager
+
+<!--FORMULARIO ADICIONAR producto-->
+<h1 style="color:Highlight">AGREGAR PRODUCTO</h1>
+
+<EditForm Model="@producto" OnValidSubmit="@ProductoInsert">
+    <table class="table">
+        <tr>
+            <td>Id Producto:</td>
+            <td><input type="text" @bind="producto.IdProducto" required /></td>
+        </tr>
+        <tr>
+            <td>Descripcion:</td>
+            <td><input type="text" @bind="producto.Nombre" required /></td>
+        </tr>
+        <tr>
+            <td>Cargo:</td>
+            <td><input type="text" @bind="producto.Marca" required /></td>
+        </tr>
+        <tr>
+            <td>Fecha Registro:</td>
+            <td><input type="text" @bind="producto.FechaRegistro" required /></td>
+        </tr>
+        <tr>
+            <td>Activo:</td>
+            <InputSelect @bind-Value="producto.Activo">
+                <option>Elige una opcion</option>
+                <option>0</option>
+                <option>1</option>
+            </InputSelect>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Insertar" />
+                <input type="button" value="Cancelar" @onclick="@Cancel" />
+            </td>
+        </tr>
+
+    </table>
+
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+    private string Message { get; set; } = "";
+    Producto producto = new Producto();
+
+    
+
+    protected async Task ProductoInsert()
+    {
+        await IProductoService.ProductoInsert(producto);
+
+       try {
+
+            using (MailMessage mail = new MailMessage())
+            {
+                mail.From = new MailAddress("daniel.rodriguez06@usc.edu.co");
+                mail.To.Add("daniel.rodriguez06@usc.edu.co");
+                mail.Subject = "¡¡Hola, no dejes pasar la oportunidad y mira estos nuevos productos!";
+
+
+               mail.Body = "<h2>Nuevo producto a la venta! </p>" + "<br>" + "ID Producto: " + producto.IdProducto + "<br>" + "Nombre: " + producto.Nombre + " <br>" + "ID marca: " + producto.Marca + "<br>" + "Fecha: " + producto.FechaRegistro;
+                
+                
+                mail.IsBodyHtml = true;
+
+                using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)){
+
+                    smtp.Credentials = new System.Net.NetworkCredential("daniel.rodriguez04@usc.edu.co", "daniel4491623");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                  
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Message = ex.Message;
+        }
+
+        NavigationManager.NavigateTo("/Productos");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/Productos");
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (id == 0)
+        {
+            producto.FechaRegistro = DateTime.Now;
+        }
+        else
+        {
+            producto = await IProductoService.ObtenerProducto(id);
+        }
+    }
+
+
+}
