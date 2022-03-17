@@ -11,8 +11,7 @@ Como propietario Quiero enviar un correo cada vez que se agrega un producto a la
 
 DESARROLLADOR: DANIEL RODRIGUEZ
 
-
-				
+(https://lh3.google.com/u/1/d/18qO9PiTdNQwMU8LGK84E_kJyXUV5sCUS=w1920-h961-iv1)
 				
 				
 				
