@@ -78,8 +78,8 @@
 
             using (MailMessage mail = new MailMessage())
             {
-                mail.From = new MailAddress("daniel.rodriguez06@usc.edu.co");
-                mail.To.Add("daniel.rodriguez06@usc.edu.co");
+                mail.From = new MailAddress("correo");
+                mail.To.Add("correo");
                 mail.Subject = "¡Hola, no dejes pasar la oportunidad y mira estos nuevos productos!";
 
 
@@ -92,7 +92,7 @@
 
                 using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)){
 
-                    smtp.Credentials = new System.Net.NetworkCredential("daniel.rodriguez04@usc.edu.co", "daniel4491623");
+                    smtp.Credentials = new System.Net.NetworkCredential("correo", "contrasena");
                     smtp.EnableSsl = true;
                     smtp.Send(mail);
                     Message = "El correo fue enviado!";
